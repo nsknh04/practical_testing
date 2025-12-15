@@ -80,4 +80,24 @@ class CourseController extends Controller
         $course->delete();
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
     }
+
+    // Q9: enroll (attach/sync)
+    public function enroll(Request $request, Student $student)
+    {
+        $data = $request->validate([
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        // attach (safe because we also added unique constraint in pivot)
+        $student->courses()->syncWithoutDetaching([$data['course_id']]);
+
+        return back()->with('success', 'Course enrolled.');
+    }
+
+    // Q9: remove enrollment (detach)
+    public function drop(Student $student, Course $course)
+    {
+        $student->courses()->detach($course->id);
+        return back()->with('success', 'Course removed.');
+    }
 }
