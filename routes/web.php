@@ -10,3 +10,9 @@ Route::get('/', function () {
 
 Route::resource('students', StudentController::class);
 Route::resource('courses', CourseController::class);
+
+Route::post('students/{student}/enroll', [StudentController::class, 'enroll'])
+    ->name('students.enroll');
+
+Route::delete('students/{student}/drop/{course}', [StudentController::class, 'drop'])
+    ->name('students.drop');
